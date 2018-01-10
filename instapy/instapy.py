@@ -1179,7 +1179,10 @@ class InstaPy:
                                                             randomize,
                                                             sleep_delay,
                                                             self.blacklist,
-                                                            self.logger)
+                                                            self.logger,
+                                                            self.ignore_users,
+                                                            self.like_by_followers_upper_limit,
+                                                            self.like_by_followers_lower_limit)
 
             except (TypeError, RuntimeWarning) as err:
                 if isinstance(err, RuntimeWarning):
@@ -1506,7 +1509,7 @@ class InstaPy:
         """Closes the current session"""
         dump_follow_restriction(self.follow_restrict)
         self.browser.delete_all_cookies()
-        self.browser.close()
+        self.browser.quit()
 
         if self.nogui:
             self.display.stop()

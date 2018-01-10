@@ -7,6 +7,7 @@ from .util import scroll_bottom
 from .util import formatNumber
 from .util import update_activity
 from .util import add_user_to_blacklist
+from .util import validate_username
 from .print_log_writer import log_followed_pool
 from selenium.common.exceptions import NoSuchElementException
 import random
@@ -424,6 +425,9 @@ def follow_through_dialog(browser,
                           delay,
                           blacklist,
                           logger,
+                          ignore_users=None,
+                          like_by_followers_upper_limit=None,
+                          like_by_followers_lower_limit=None,
                           callbacks=[]):
     sleep(2)
     person_followed = []
@@ -502,6 +506,17 @@ def follow_through_dialog(browser,
                         'sleeping for about {} minutes'.format(delay/60))
                 sleep(delay)
                 hasSlept = True
+                continue
+
+            valid_user = validate_username(browser,
+                                           person,
+                                           ignore_users,
+                                           blacklist,
+                                           like_by_followers_upper_limit,
+                                           like_by_followers_lower_limit)
+
+            if valid_user is not True:
+                logger.info(valid_user)
                 continue
 
             if person not in dont_include:
@@ -691,7 +706,10 @@ def follow_given_user_followers(browser,
                                 random,
                                 delay,
                                 blacklist,
-                                logger):
+                                logger,
+                                ignore_users,
+                                like_by_followers_upper_limit,
+                                like_by_followers_lower_limit):
 
     browser.get('https://www.instagram.com/' + user_name)
     # update server calls
@@ -725,6 +743,9 @@ def follow_given_user_followers(browser,
                                            delay,
                                            blacklist,
                                            logger,
+                                           ignore_users,
+                                           like_by_followers_upper_limit,
+                                           like_by_followers_lower_limit,
                                            callbacks=[])
 
     return personFollowed

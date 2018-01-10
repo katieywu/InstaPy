@@ -2,6 +2,7 @@ import csv
 import os
 from .time_util import sleep
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 import sqlite3
 import datetime
 
@@ -20,11 +21,20 @@ def validate_username(browser,
     if username in blacklist:
         return '---> {} is in blacklist, skipping user...'
 
+    tabs = browser.window_handles
+
+    if len(tabs) < 2:
+        browser.execute_script("window.open('about:blank', 'tab2');")
+
+    browser.switch_to.window("tab2")
     browser.get('https://www.instagram.com/{}'.format(username))
+
+    # browser.get('https://www.instagram.com/{}'.format(username))
     sleep(1)
     try:
         followers = (formatNumber(browser.find_element_by_xpath("//a[contains"
                      "(@href,'followers')]/span").text))
+        browser.switch_to.window(browser.window_handles[0])
     except NoSuchElementException:
         return '---> {} account is private, skipping user...'.format(username)
 
