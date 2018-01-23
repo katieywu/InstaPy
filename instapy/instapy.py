@@ -43,6 +43,10 @@ from .unfollow_util import dump_follow_restriction
 from .unfollow_util import set_automated_followed_pool
 
 
+# Set a logger cache outside the InstaPy object to avoid re-instantiation issues
+loggers = {}
+
+
 class InstaPy:
     """Class to be instantiated to use the script"""
 
@@ -109,27 +113,15 @@ class InstaPy:
         self.clarifai_img_tags = []
         self.clarifai_full_match = False
 
-        self.like_by_followers_upper_limit = 0
+        self.like_by_followers_upper_limit = 90000
         self.like_by_followers_lower_limit = 0
 
         self.bypass_suspicious_attempt = bypass_suspicious_attempt
 
         self.aborting = False
 
-        # initialize and setup logging system
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)
-        file_handler = logging.FileHandler('./logs/general.log')
-        file_handler.setLevel(logging.DEBUG)
-        logger_formatter = logging.Formatter('%(levelname)s - %(message)s')
-        file_handler.setFormatter(logger_formatter)
-        self.logger.addHandler(file_handler)
-
-        if show_logs is True:
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.DEBUG)
-            console_handler.setFormatter(logger_formatter)
-            self.logger.addHandler(console_handler)
+        # Assign logger
+        self.logger = self.get_instapy_logger(show_logs)
 
         if selenium_local_session:
             self.set_selenium_local_session()
@@ -138,6 +130,32 @@ class InstaPy:
             error_msg = ('Sorry, Record Activity is not working on Windows. '
                          'We\'re working to fix this soon!')
             self.logger.warning(error_msg)
+
+    def get_instapy_logger(self, show_logs):
+        """
+        Handles the creation and retrieval of loggers to avoid re-instantiation.
+        """
+        existing_logger = loggers.get(__name__)
+        if existing_logger is not None:
+            return existing_logger
+        else:
+            # initialize and setup logging system for the InstaPy object
+            logger = logging.getLogger(__name__)
+            logger.setLevel(logging.DEBUG)
+            file_handler = logging.FileHandler('./logs/general.log')
+            file_handler.setLevel(logging.DEBUG)
+            logger_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+            file_handler.setFormatter(logger_formatter)
+            logger.addHandler(file_handler)
+
+            if show_logs is True:
+                console_handler = logging.StreamHandler()
+                console_handler.setLevel(logging.DEBUG)
+                console_handler.setFormatter(logger_formatter)
+                logger.addHandler(console_handler)
+
+            loggers[__name__] = logger
+            return logger
 
     def set_selenium_local_session(self):
         """Starts local session for a selenium server.
@@ -606,7 +624,8 @@ class InstaPy:
                      amount=50,
                      media=None,
                      skip_top_posts=True,
-                     use_smart_hashtags=False):
+                     use_smart_hashtags=False,
+                     interact=False):
         """Likes (default) 50 images per given tag"""
         if self.aborting:
             return self
@@ -666,6 +685,26 @@ class InstaPy:
                                            self.logger)
 
                         if liked:
+
+                            if interact:
+                                username = (self.browser.
+                                    find_element_by_xpath(
+                                        '//article/header/div[2]/'
+                                        'div[1]/div/a'))
+
+                                username = username.get_attribute("title")
+                                name = []
+                                name.append(username)
+
+                                self.logger.info(
+                                    '--> User followed: {}'
+                                    .format(name))
+                                self.like_by_users(
+                                    name,
+                                    self.user_interact_amount,
+                                    self.user_interact_random,
+                                    self.user_interact_media)
+
                             liked_img += 1
                             checked_img = True
                             temp_comments = []
@@ -1091,7 +1130,6 @@ class InstaPy:
                                                 amount,
                                                 self.dont_include,
                                                 self.username,
-                                                self.follow_restrict,
                                                 randomize,
                                                 self.logger)
                 if isinstance(user, list):
@@ -1132,7 +1170,6 @@ class InstaPy:
                     amount,
                     self.dont_include,
                     self.username,
-                    self.follow_restrict,
                     randomize,
                     self.logger)
         except (TypeError, RuntimeWarning) as err:
@@ -1182,7 +1219,8 @@ class InstaPy:
                                                             self.logger,
                                                             self.ignore_users,
                                                             self.like_by_followers_upper_limit,
-                                                            self.like_by_followers_lower_limit)
+                                                            self.like_by_followers_lower_limit,
+                                                            self.follow_times)
 
             except (TypeError, RuntimeWarning) as err:
                 if isinstance(err, RuntimeWarning):
@@ -1229,7 +1267,8 @@ class InstaPy:
                                                             randomize,
                                                             sleep_delay,
                                                             self.blacklist,
-                                                            self.logger)
+                                                            self.logger,
+                                                            self.follow_times)
 
             except (TypeError, RuntimeWarning) as err:
                 if isinstance(err, RuntimeWarning):
@@ -1520,3 +1559,78 @@ class InstaPy:
 
         with open('./logs/followed.txt', 'w') as followFile:
             followFile.write(str(self.followed))
+
+    def follow_by_tags(self,
+                     tags=None,
+                     amount=50,
+                     media=None,
+                     skip_top_posts=True,
+                     use_smart_hashtags=False):
+        if self.aborting:
+            return self
+
+        inap_img = 0
+        followed = 0
+
+        # if smart hashtag is enabled
+        if use_smart_hashtags is True and self.smart_hashtags is not []:
+            print('Using smart hashtags')
+            tags = self.smart_hashtags
+
+        # deletes white spaces in tags
+        tags = [tag.strip() for tag in tags]
+
+        tags = tags or []
+
+        for index, tag in enumerate(tags):
+            self.logger.info('Tag [{}/{}]'.format(index + 1, len(tags)))
+            self.logger.info('--> {}'.format(tag.encode('utf-8')))
+
+            try:
+                links = get_links_for_tag(self.browser,
+                                          tag,
+                                          amount,
+                                          self.logger,
+                                          media,
+                                          skip_top_posts)
+            except NoSuchElementException:
+                self.logger.error('Too few images, skipping this tag')
+                continue
+
+            for i, link in enumerate(links):
+                self.logger.info('[{}/{}]'.format(i + 1, len(links)))
+                self.logger.info(link)
+
+                try:
+                    inappropriate, user_name, is_video, reason = (
+                        check_link(self.browser,
+                                   link,
+                                   self.dont_like,
+                                   self.ignore_if_contains,
+                                   self.ignore_users,
+                                   self.username,
+                                   self.like_by_followers_upper_limit,
+                                   self.like_by_followers_lower_limit,
+                                   self.logger)
+                    )
+
+                    if not inappropriate:
+                        followed += follow_user(self.browser,
+                                                        self.follow_restrict,
+                                                        self.username,
+                                                        user_name,
+                                                        self.blacklist,
+                                                        self.logger)
+                    else:
+                        self.logger.info(
+                            '--> User not followed: {}'.format(reason))
+                        inap_img += 1
+                except NoSuchElementException as err:
+                    self.logger.error('Invalid Page: {}'.format(err))
+
+        self.logger.info('Inappropriate: {}'.format(inap_img))
+        self.logger.info('Followed: {}'.format(followed))
+
+        self.followed += followed
+
+        return self

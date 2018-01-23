@@ -16,7 +16,7 @@ import random
 def set_automated_followed_pool(username, logger):
     automatedFollowedPool = []
     try:
-        with open('./logs/' + username + '_followedPool.csv') as \
+        with open('./logs/{}_followedPool.csv'.format(username), 'r+') as \
                 followedPoolFile:
             reader = csv.reader(followedPoolFile)
             automatedFollowedPool = [row[0] for row in reader]
@@ -425,6 +425,7 @@ def follow_through_dialog(browser,
                           delay,
                           blacklist,
                           logger,
+                          follow_times,
                           ignore_users=None,
                           like_by_followers_upper_limit=None,
                           like_by_followers_lower_limit=None,
@@ -521,7 +522,9 @@ def follow_through_dialog(browser,
                 logger.info(valid_user)
                 continue
 
-            if person not in dont_include:
+            if (person not in dont_include and
+            follow_restrict.get(person, 0) < follow_times):
+
                 followNum += 1
                 # Register this session's followed user for further interaction
                 person_followed.append(person)
@@ -573,7 +576,6 @@ def get_given_user_followers(browser,
                              amount,
                              dont_include,
                              login,
-                             follow_restrict,
                              randomize,
                              logger):
 
@@ -639,7 +641,6 @@ def get_given_user_following(browser,
                              amount,
                              dont_include,
                              login,
-                             follow_restrict,
                              randomize,
                              logger):
 
@@ -713,7 +714,8 @@ def follow_given_user_followers(browser,
                                 logger,
                                 ignore_users,
                                 like_by_followers_upper_limit,
-                                like_by_followers_lower_limit):
+                                like_by_followers_lower_limit,
+                                follow_times):
 
     browser.get('https://www.instagram.com/' + user_name)
     # update server calls
@@ -750,6 +752,7 @@ def follow_given_user_followers(browser,
                                            ignore_users,
                                            like_by_followers_upper_limit,
                                            like_by_followers_lower_limit,
+                                           follow_times,
                                            callbacks=[])
 
     return personFollowed
@@ -764,7 +767,8 @@ def follow_given_user_following(browser,
                                 random,
                                 delay,
                                 blacklist,
-                                logger):
+                                logger,
+                                follow_times):
 
     browser.get('https://www.instagram.com/' + user_name)
     # update server calls
@@ -797,7 +801,8 @@ def follow_given_user_following(browser,
                                            random,
                                            delay,
                                            blacklist,
-                                           logger)
+                                           logger,
+                                           follow_times)
 
     return personFollowed
 
