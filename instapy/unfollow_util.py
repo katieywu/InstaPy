@@ -434,6 +434,8 @@ def follow_through_dialog(browser,
     real_amount = amount
     if randomize and amount >= 3:
         # expanding the popultaion for better sampling distribution
+        amount = amount * 5
+    else:
         amount = amount * 3
 
     # find dialog box
@@ -483,7 +485,7 @@ def follow_through_dialog(browser,
         hasSlept = False
         btnPerson = list(zip(follow_buttons, person_list))
         if randomize:
-            sample = random.sample(range(0, len(follow_buttons)), real_amount)
+            sample = random.sample(range(0, len(follow_buttons)), real_amount*5)
             finalBtnPerson = []
             for num in sample:
                 finalBtnPerson.append(btnPerson[num])
@@ -560,6 +562,8 @@ def follow_through_dialog(browser,
 
     except BaseException as e:
         logger.error("follow loop error {}".format(str(e)))
+
+    browser.switch_to.window(browser.window_handles[0])
 
     return person_followed
 

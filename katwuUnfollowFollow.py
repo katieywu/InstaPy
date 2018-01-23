@@ -42,7 +42,7 @@ session.set_dont_like(['#adulting', '#alone', '#americangirl', '#ariefmirna2015'
 # default enabled=False, follows ~ every 10th user from the images
 session.set_dont_include(['sydneywilsonnn','netalirich','thestylestatus','natalie.alysa','andreaxagain','danielledijkers','hanadp','akheiss','lejardintricote','caroberrylove','afterabby','lindseyalouie', 'simply.sami', 'browneyedtoast', 'eggcanvas', 'trulylaur', 'zoras_daughter', 'baileymbc', 'miiamata', 'misstarabelle', 'cookiecat.herine', 'livblankson', 'blackarrowblog', 'figtny', '_hollyt', 'thebrittkit', 'zhours', 'minimalist.aesthetics', 'krischerie', 'neonblush', 'dylanasuarez', 'reemkanj', 'vonvogue', 'cheraleelyle', 'moreelistyle', 'fig.1a', 'missannatai', 'andyheart', 'mypetitedilemma', 'icingandglitter', 'westelm', 'dromelot', 'city_fashion_blogger', 'stylish_stories_', 'xoxotsumi', 'lizaherlands_', 'irists', 'fashionfeaturesocial', 'cityinstills', 'the.ivory.fawn', 'nycbambi', 'the7pm', 'kiraamaa', 'beauxmondes', 'harperandharley', 'joanneeleanore', 'kristauffer', 'styledbyjackie', 'lillehoang', 'katherrinetaylor', 'her_editorial', 'cassiemasangkay', 'lydiajanetomlinson', 'oliviabynature', 'mija_mija', 'bardot', 'msbeltempo', 'julesdenby', 'bangbangnyc', 'jlisabethl', 'margasalomc', 'kaity_modern', 'viennawedekind', 'ozma_of_california', 'stephweizman', 'veganeatsnyc', 'jeannedamas', 't_canvas', 'glossier', 'melissaorons', 'jordanrisa', 'erica.maltz', 'kristywho', 'nettxyer13', 'flobreezyy', 'taylranne', 'honeynsilk', 'noanoir_', 'elisaschenke', 'imjennim', 'tiffwang_', 'thelustlistt', 'alyssa.lenore', 'rice_ink', 'itsdayslikethis', 'newyork_act', 'teale_talbot', 'bandier', 'hellowhitney', 'senseforstylebyina', 'emrata', 'joannahalpin', 'allanaramaa', 'thefashioncuisine', 'theglowedit', 'creativeecho', 'howdoyouwearthat', 'chrisellelim', 'seenbyhanna', 'cityhobbit', 'brittfabello', 'angrybaker', 'diannnnneee', 'tania_sarin', 'thetrottergirl', 'melissamale', 'alyssalyncholiviaculpo', 'emily_luciano', 'anaiseleni', 'songofstyle', 'cerealmag', 'kinfolk', 'alice_gao'])
 session.set_upper_follower_count(limit=100000)
-session.set_lower_follower_count(limit=600)
+session.set_lower_follower_count(limit=500)
 session.set_do_follow(enabled=False, percentage=11, times=1)
 
 """Like util"""
@@ -90,7 +90,6 @@ session.like_by_tags(["#fashiondaily", "#ootdfash", "#outfitinspo", "#whatiwore"
                       'celineworld', 'casualstyle', 'uoonyou', 'asseenonme', 'makeyousmilestyle', 'theeverygirl'],
                      amount=10)
 
-
 # For 50% of the 30 newly followed, move to their profile
 # and randomly choose 5 picturefas to be liked.
 # Take into account the other set options like the comment rate
@@ -98,9 +97,9 @@ session.like_by_tags(["#fashiondaily", "#ootdfash", "#outfitinspo", "#whatiwore"
 
 session.set_user_interact(amount=2, randomize=False, percentage=65, media='Photo')
 
-# session.unfollow_users(amount=90, onlyInstapyFollowed=True)
+session.unfollow_users(amount=90, onlyInstapyFollowed=True)
 
-session.follow_user_followers(["caitlinmiyako",'kristengracelam',"kristywho"], amount=30, randomize=True, interact=False)
+session.follow_user_followers(["alyssa.lenore",'kristengracelam',"kristywho"], amount=30, randomize=True, interact=False)
 
 # session.like_by_feed(amount=100)
 

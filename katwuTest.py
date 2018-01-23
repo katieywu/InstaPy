@@ -64,32 +64,32 @@ session.set_do_follow(enabled=False, percentage=11, times=1)
 
 
 # you can put in as much tags as you want, likes 100 of each tag
-# session.like_by_tags(["#seeyourcity", "#loves_nyc",
-#                       "#seekthesimplicity", "#liveunscripted",
-#                       "#darlingescapes", "#thatsdarling", "#thehappynow", "#theartofslowliving", "#aquietstyle",
-#                       "#verilymoment", "#postitfortheaesthetic", "#foreveryoung", "#visualsoflife", "#nycblogger",
-#                       '#ootdfash', '#outfitinspo', '#whatiwore', '#currentlywearing', '#fashiongram', '#fashionaddict',
-#                       '#nycblogger', '#nycstyle', '#fblogger', '#fashionblogger', '#asseenonme', '#todaysoutfit',
-#                       '#igstyle', '#fwis', '#pursuepretty', '#ootdshare', '#ootdwatch', '#outfitideas', '#styleblogger',
-#                       '#minimalove', '#bloggerfashion', '#stylediaries', '#fashioninspo', '#aboutalook',
-#                       '#wearthisnext', '#streetstyle', '#styleguide', '#womensweardaily', '#portraitmode',
-#                       '#fashionstatement', '#ootdmagazine', '#ootdsubmit', '#inspocafe', '#worldfashionstyles',
-#                       '#streetstyleluxe', '#minimalstreetstyle', '#fashionvoyage', '#classicoutfit', '#classiclook',
-#                       '#ootdstyle'], amount=10)
-
-
-session.like_by_tags(["#ootdfash", "#outfitinspo", "#whatiwore", "#currentlywearing", "#fashiongram",
-                      "#todaysoutfit", "#igstyle", "#fromwhereistand", "#pursuepretty", "#chasinglight", "#fashionista",
-                      "#ootdshare", "#ootdwatch", "#outfitideas", "#styleblogger", "#fblogger",
-                      "#minimalove", "#bloggerfashion", "#outfitinspiration", "#stylediaries", "#fashioninspo",
-                      "#aboutalook", '#wearthisnext', '#thatsdarling', '#styleguide', '#womensweardaily', '#portraitmode',
+session.like_by_tags(["#seeyourcity", "#loves_nyc",
+                      "#seekthesimplicity", "#liveunscripted",
+                      "#darlingescapes", "#thatsdarling", "#thehappynow", "#theartofslowliving", "#aquietstyle",
+                      "#verilymoment", "#postitfortheaesthetic", "#foreveryoung", "#visualsoflife", "#nycblogger",
+                      '#ootdfash', '#outfitinspo', '#whatiwore', '#currentlywearing', '#fashiongram', '#fashionaddict',
+                      '#nycblogger', '#nycstyle', '#fblogger', '#fashionblogger', '#asseenonme', '#todaysoutfit',
+                      '#igstyle', '#fwis', '#pursuepretty', '#ootdshare', '#ootdwatch', '#outfitideas', '#styleblogger',
+                      '#minimalove', '#bloggerfashion', '#stylediaries', '#fashioninspo', '#aboutalook',
+                      '#wearthisnext', '#streetstyle', '#styleguide', '#womensweardaily', '#portraitmode',
                       '#fashionstatement', '#ootdmagazine', '#ootdsubmit', '#inspocafe', '#worldfashionstyles',
                       '#streetstyleluxe', '#minimalstreetstyle', '#fashionvoyage', '#classicoutfit', '#classiclook',
-                      '#ootdstyle', '#personalstyle', '#minimalstyle', '#minimalfashion', '#bloggerlife',
-                      '#bloggerstyle', '#fashiondetails', '#fashiongoals', '#nycblogger', '#nycfashionblogger',
-                      '#streetfashion', '#streetstyleluxe', '#styleinspo', '#fashioninspo', '#styleinspiration',
-                      '#fashioninspiration', '#ootdsubmit', '#stylediary', '#detailsoftheday'],
-                     amount=1)
+                      '#ootdstyle'], amount=15)
+
+
+# session.like_by_tags(["#ootdfash", "#outfitinspo", "#whatiwore", "#currentlywearing", "#fashiongram",
+#                       "#todaysoutfit", "#igstyle", "#fromwhereistand", "#pursuepretty", "#chasinglight", "#fashionista",
+#                       "#ootdshare", "#ootdwatch", "#outfitideas", "#styleblogger", "#fblogger",
+#                       "#minimalove", "#bloggerfashion", "#outfitinspiration", "#stylediaries", "#fashioninspo",
+#                       "#aboutalook", '#wearthisnext', '#thatsdarling', '#styleguide', '#womensweardaily', '#portraitmode',
+#                       '#fashionstatement', '#ootdmagazine', '#ootdsubmit', '#inspocafe', '#worldfashionstyles',
+#                       '#streetstyleluxe', '#minimalstreetstyle', '#fashionvoyage', '#classicoutfit', '#classiclook',
+#                       '#ootdstyle', '#personalstyle', '#minimalstyle', '#minimalfashion', '#bloggerlife',
+#                       '#bloggerstyle', '#fashiondetails', '#fashiongoals', '#nycblogger', '#nycfashionblogger',
+#                       '#streetfashion', '#streetstyleluxe', '#styleinspo', '#fashioninspo', '#styleinspiration',
+#                       '#fashioninspiration', '#ootdsubmit', '#stylediary', '#detailsoftheday'],
+#                      amount=15)
 
 # For 50% of the 30 newly followed, move to their profile
 # and randomly choose 5 pictures to be liked.
